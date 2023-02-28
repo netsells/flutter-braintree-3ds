@@ -13,6 +13,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.braintreepayments.api.dropin.DropInActivity;
 import com.braintreepayments.api.dropin.DropInRequest;
@@ -93,6 +94,7 @@ public class FlutterBraintreeDropIn implements FlutterPlugin, ActivityAware, Met
                         .nonce((String) call.argument("nonce"))
         );
       }
+      Log.d("3DSecure", dropInRequest.getThreeDSecureRequest().getNonce());
 
       if (clientToken != null)
         dropInRequest.clientToken(clientToken);
