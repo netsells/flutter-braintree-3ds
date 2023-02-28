@@ -65,6 +65,9 @@ public class FlutterBraintreeDropInPlugin: BaseFlutterBraintreePlugin, FlutterPl
                 let threeDSecureRequest = BTThreeDSecureRequest()
                 threeDSecureRequest.threeDSecureRequestDelegate = self
                 threeDSecureRequest.amount = NSDecimalNumber(string: amount)
+                if let nonce = string(for: "nonce", in: call) {
+                    threeDSecureRequest.nonce = nonce
+                }
                 dropInRequest.threeDSecureRequest = threeDSecureRequest
             }
 
