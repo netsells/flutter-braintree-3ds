@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.braintreepayments.api.BraintreeFragment;
+import com.braintreepayments.api.Card;
 import com.braintreepayments.api.PayPal;
 import com.braintreepayments.api.ThreeDSecure;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
@@ -35,7 +36,9 @@ public class FlutterBraintreeCustom extends AppCompatActivity implements Payment
             Intent intent = getIntent();
             braintreeFragment = BraintreeFragment.newInstance(this, intent.getStringExtra("authorization"));
             String type = intent.getStringExtra("type");
-            if (type.equals("requestPaypalNonce")) {
+            if (type.equals("tokenizeCreditCard")) {
+                tokenizeCreditCard();
+            } else if (type.equals("requestPaypalNonce")) {
                 requestPaypalNonce();
             } else if (type.equals("request3dsNonce")) {
                 request3dsNonce(
@@ -53,6 +56,18 @@ public class FlutterBraintreeCustom extends AppCompatActivity implements Payment
             finish();
             return;
         }
+    }
+
+    protected void tokenizeCreditCard() {
+        Intent intent = getIntent();
+        CardBuilder builder = new CardBuilder()
+                .cardNumber(intent.getStringExtra("cardNumber"))
+                .expirationMonth(intent.getStringExtra("expirationMonth"))
+                .expirationYear(intent.getStringExtra("expirationYear"))
+                .cvv(intent.getStringExtra("cvv"))
+                .validate(false)
+                .cardholderName(intent.getStringExtra("cardholderName"));
+        Card.tokenize(braintreeFragment, builder);
     }
 
     protected void requestPaypalNonce() {
