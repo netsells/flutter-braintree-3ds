@@ -8,14 +8,20 @@ import android.os.Bundle;
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.Card;
 import com.braintreepayments.api.PayPal;
+import com.braintreepayments.api.ThreeDSecure;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.interfaces.BraintreeCancelListener;
 import com.braintreepayments.api.interfaces.BraintreeErrorListener;
+import com.braintreepayments.api.interfaces.BraintreeListener;
 import com.braintreepayments.api.interfaces.PaymentMethodNonceCreatedListener;
+import com.braintreepayments.api.interfaces.ThreeDSecureLookupListener;
 import com.braintreepayments.api.models.CardBuilder;
+import com.braintreepayments.api.models.CardNonce;
 import com.braintreepayments.api.models.PayPalRequest;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.PayPalAccountNonce;
+import com.braintreepayments.api.models.ThreeDSecureLookup;
+import com.braintreepayments.api.models.ThreeDSecureRequest;
 
 import java.util.HashMap;
 
@@ -34,6 +40,12 @@ public class FlutterBraintreeCustom extends AppCompatActivity implements Payment
                 tokenizeCreditCard();
             } else if (type.equals("requestPaypalNonce")) {
                 requestPaypalNonce();
+            } else if (type.equals("request3dsNonce")) {
+                request3dsNonce(
+                    intent.getStringExtra("nonce"),
+                    intent.getStringExtra("amount"),
+                    intent.getStringExtra("email")
+                );
             } else {
                 throw new Exception("Invalid request type: " + type);
             }
@@ -85,6 +97,20 @@ public class FlutterBraintreeCustom extends AppCompatActivity implements Payment
             // Checkout flow
             PayPal.requestOneTimePayment(braintreeFragment, request);
         }
+    }
+
+    public void request3dsNonce(String nonce, String amount, String email) {
+        ThreeDSecureRequest threeDSecureRequest = new ThreeDSecureRequest()
+          .amount(amount)
+          .email(email)
+          .nonce(nonce)
+          .versionRequested(ThreeDSecureRequest.VERSION_2);
+        ThreeDSecure.performVerification(braintreeFragment, threeDSecureRequest, new ThreeDSecureLookupListener() {
+            @Override
+            public void onLookupComplete(ThreeDSecureRequest request, ThreeDSecureLookup lookup) {
+                ThreeDSecure.continuePerformVerification(braintreeFragment, request, lookup);
+            }
+        });
     }
 
     @Override
