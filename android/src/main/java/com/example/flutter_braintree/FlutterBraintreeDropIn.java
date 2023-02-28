@@ -21,6 +21,7 @@ import com.braintreepayments.api.models.GooglePaymentRequest;
 import com.braintreepayments.api.models.PayPalRequest;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 
+import com.braintreepayments.api.models.ThreeDSecureRequest;
 import com.google.android.gms.wallet.TransactionInfo;
 import com.google.android.gms.wallet.WalletConstants;
 
@@ -79,6 +80,11 @@ public class FlutterBraintreeDropIn implements FlutterPlugin, ActivityAware, Met
       String clientToken = call.argument("clientToken");
       String tokenizationKey = call.argument("tokenizationKey");
       DropInRequest dropInRequest = new DropInRequest()
+              .threeDSecureRequest(
+                      new ThreeDSecureRequest()
+                              .amount((String) call.argument("amount"))
+                              .nonce((String) call.argument("nonce"))
+              )
               .amount((String) call.argument("amount"))
               .collectDeviceData((Boolean) call.argument("collectDeviceData"))
               .requestThreeDSecureVerification((Boolean) call.argument("requestThreeDSecureVerification"))
