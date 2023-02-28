@@ -92,9 +92,11 @@ public class FlutterBraintreeDropIn implements FlutterPlugin, ActivityAware, Met
                 new ThreeDSecureRequest()
                         .amount((String) call.argument("amount"))
                         .nonce((String) call.argument("nonce"))
+                        .versionRequested(ThreeDSecureRequest.VERSION_2)
+                        .challengeRequested(true)
         );
       }
-      Log.d("3DSecure", dropInRequest.getThreeDSecureRequest().getNonce());
+      // Log.d("3DSecure", dropInRequest.getThreeDSecureRequest().getNonce());
 
       if (clientToken != null)
         dropInRequest.clientToken(clientToken);
