@@ -15,7 +15,7 @@ class Braintree {
   /// [request] should contain all the credit card information necessary for tokenization.
   ///
   /// Returns a [Future] that resolves to a [BraintreePaymentMethodNonce] if the tokenization was successful.
-  static Future<BraintreePaymentMethodNonce?> tokenizeCreditCard(
+  /*static Future<BraintreePaymentMethodNonce?> tokenizeCreditCard(
     String authorization,
     BraintreeCreditCardRequest request,
   ) async {
@@ -25,7 +25,7 @@ class Braintree {
     });
     if (result == null) return null;
     return BraintreePaymentMethodNonce.fromJson(result);
-  }
+  }*/
 
   /// Requests a PayPal payment method nonce.
   ///
