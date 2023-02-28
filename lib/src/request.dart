@@ -14,6 +14,7 @@ class BraintreeDropInRequest {
     this.maskCardNumber = false,
     this.maskSecurityCode = false,
     this.vaultManagerEnabled = false,
+    this.nonce,
   });
 
   /// Authorization allowing this client to communicate with Braintree.
